@@ -2,12 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:login_screen/login_screen.dart';
 
+/// TODO write a test
+/// note, may not be able to write a widget test as this is a flutter package,
+/// not a flutter plugin. So may not have access to flutter ios/android apis.
+/// I don't know ...tbd.
+
 void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
-    expect(() => calculator.addOne(null), throwsNoSuchMethodError);
+  test('someTest', () {
+    expect(true, true);
   });
 }
