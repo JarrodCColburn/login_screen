@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import '../util/loginForm.dart';
 
 typedef CredentialsCallback = Future<void> Function(
     String email, String password);
 
-String emailValidator(String email) {
-  // TODO Validate, will return string if not valid
-  return null;
-}
-
-String passwordValidator(String password) {
-  // TODO Validate, will return string if not valid
-  return null;
-}
-
 class LoginScreen extends StatefulWidget {
+  final Widget logo;
   final CredentialsCallback credentialsCallback;
 
-  LoginScreen({this.credentialsCallback});
+  LoginScreen({this.credentialsCallback, this.logo});
 
   final LoginForm loginForm = new LoginForm();
 
@@ -31,11 +21,8 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = true;
 
-  void toggleVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
-  }
+  void toggleVisibility() =>
+      setState(() => _isPasswordVisible = !_isPasswordVisible);
 
   bool _isLoading = false;
 
@@ -53,25 +40,25 @@ class LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Widget _buildForm(BuildContext context) => Form(
+  Widget _buildForm() => Form(
         key: widget.loginForm.formKey,
         child: Column(
           children: <Widget>[
-            _buildEmailField(context),
-            _buildPasswordField(context),
-            _buildSubmitButton(context),
+            _buildEmailField(),
+            _buildPasswordField(),
+            _buildSubmitButton(),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
       );
 
-  Widget _buildSubmitButton(BuildContext context) => RaisedButton(
+  Widget _buildSubmitButton() => RaisedButton(
         onPressed: _handleSubmit,
         child: (_isLoading) ? CircularProgressIndicator() : Text('Submit'),
         shape: RoundedRectangleBorder(),
       );
 
-  Widget _buildEmailField(BuildContext context) => TextFormField(
+  Widget _buildEmailField() => TextFormField(
         controller: widget.loginForm.email,
         validator: widget.loginForm.emailValidator,
         obscureText: false,
@@ -84,7 +71,7 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  Widget _buildPasswordField(BuildContext context) => TextFormField(
+  Widget _buildPasswordField() => TextFormField(
         controller: widget.loginForm.password,
         validator: widget.loginForm.passwordValidator,
         obscureText: _isPasswordVisible,
@@ -105,8 +92,17 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  bool isKeyboard(BuildContext context) =>
-      MediaQuery.of(context).viewInsets.bottom <= 0.0;
+  bool get isKeyboard => MediaQuery.of(context).viewInsets.bottom > 0.0;
+
+  Widget get logo => (isKeyboard)
+      ? null
+      : Container(
+          child: widget.logo,
+          margin: EdgeInsets.symmetric(horizontal: 40.0),
+        );
+
+  List<Widget> get widgets =>
+      [_buildForm(), logo]..removeWhere((e) => e == null);
 
   @override
   Widget build(BuildContext context) {
@@ -115,17 +111,7 @@ class LoginScreenState extends State<LoginScreen> {
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildForm(context),
-          (isKeyboard(context))
-              ? Container(
-                  child: Image.network(
-                    'https://cdn.pixabay.com/photo/2012/04/01/19/29/tower-24208_960_720.png',
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                )
-              : Container()
-        ],
+        children: widgets,
       )),
     );
   }
