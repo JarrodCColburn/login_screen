@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../util/loginForm.dart';
 
-/// Return a string if an error (ex: 'no user'), returns null if no success.
-typedef CredentialsCallback = Future<String> Function(
+typedef CredentialsCallback = Future<void> Function(
     String email, String password);
 
 String emailValidator(String email) {
