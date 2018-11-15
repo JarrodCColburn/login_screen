@@ -14,7 +14,7 @@ class Auth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   void signOut() => _auth.signOut().whenComplete(()=>this._update());
   void _update()=> _auth.currentUser().then((user)=>_user.add(user)); 
-  void emailSignIn({String email, String password})=> _auth.signInWithEmailAndPassword(email: email, password: password).then((user)=>_user.add(user));
+  void emailSignIn(String email, String password)=> _auth.signInWithEmailAndPassword(email: email, password: password).then((user)=>_user.add(user));
   set onLogout(LogoutAction action){
     _user.where((user)=>user == null).listen((_){
       action();

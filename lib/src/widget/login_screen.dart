@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
+import '../util/loginForm.dart';
 
 /// Return a string if an error (ex: 'no user'), returns null if no success.
 typedef CredentialsCallback = Future<String> Function(
     String email, String password);
-typedef FormTextValidator = String Function(String value);
-
-class LoginForm {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final TextEditingController email = new TextEditingController();
-  final TextEditingController password = new TextEditingController();
-  final FormTextValidator emailValidator;
-  final FormTextValidator passwordValidator;
-
-  LoginForm({this.emailValidator, this.passwordValidator});
-}
 
 String emailValidator(String email) {
   // TODO Validate, will return string if not valid
