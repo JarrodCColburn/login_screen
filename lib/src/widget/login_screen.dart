@@ -48,7 +48,7 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  Widget _buildSubmitButton() => RaisedButton(onPressed: _handleSubmit);
+  Widget _buildSubmitButton() => RaisedButton(onPressed: _handleSubmit,child: Text('Submit'),);
 
   Widget _buildEmailField() => TextFormField(
         controller: widget.loginForm.email,
@@ -75,6 +75,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildForm();
+    return Center(child: _buildForm());
   }
 }
