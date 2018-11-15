@@ -9,7 +9,9 @@ class AuthPage extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       body: SafeArea(child:
-        LoginScreen(credentialsCallback: Auth.instance.emailSignIn,)
+          LoginScreen(
+            credentialsCallback: Auth.instance.emailSignIn,
+          )
       ),
     );
   }
