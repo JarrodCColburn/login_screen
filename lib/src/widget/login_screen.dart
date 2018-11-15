@@ -19,8 +19,7 @@ class LoginScreen extends StatefulWidget {
 
   LoginScreen({this.credentialsCallback});
 
-  final LoginForm loginForm = new LoginForm(
-      emailValidator: emailValidator, passwordValidator: passwordValidator);
+  final LoginForm loginForm = new LoginForm();
 
   @override
   LoginScreenState createState() {
@@ -29,12 +28,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  bool isPasswordObscure = true;
+  bool _isPasswordVisible = true;
+  void toggleVisibility(){
+    setState(() {
+     _isPasswordVisible =! _isPasswordVisible;
+    });
+  }
+
+  bool _isLoading = false;
+  void startLoading()=> setState(() => _isLoading = true);
+  void endLoading()=> setState(() => _isLoading = false);
 
   void _handleSubmit() {
-    String email = widget.loginForm.email.value.text;
-    String password = widget.loginForm.password.value.text;
-    widget.credentialsCallback(email, password);
+    bool isValid = widget.loginForm.formKey.currentState.validate();
+    if (isValid) {
+      String email = widget.loginForm.email.value.text;
+      String password = widget.loginForm.password.value.text;
+      startLoading();
+      widget.credentialsCallback(email, password).whenComplete(endLoading);
+    }
   }
 
   Widget _buildForm() => Form(
@@ -45,16 +57,18 @@ class LoginScreenState extends State<LoginScreen> {
             _buildPasswordField(),
             _buildSubmitButton(),
           ],
+          mainAxisAlignment: MainAxisAlignment.center,
         ),
       );
 
   Widget _buildSubmitButton() => RaisedButton(
         onPressed: _handleSubmit,
-        child: Container(child: Text('SubmitMe')),
+        child: (_isLoading) ? CircularProgressIndicator() : Text('Submit'),
       );
 
   Widget _buildEmailField() => TextFormField(
         controller: widget.loginForm.email,
+        validator: widget.loginForm.emailValidator,
         obscureText: false,
         decoration: InputDecoration(
           labelText: 'Email',
@@ -64,12 +78,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget _buildPasswordField() => TextFormField(
         controller: widget.loginForm.password,
-        obscureText: isPasswordObscure,
+        validator: widget.loginForm.passwordValidator,
+        obscureText: _isPasswordVisible,
         decoration: InputDecoration(
           labelText: 'Password',
           icon: GestureDetector(
-            onTap: () => setState(() => isPasswordObscure = !isPasswordObscure),
-            child: (isPasswordObscure)
+            onTap: toggleVisibility,
+            child: (_isPasswordVisible)
                 ? Icon(Icons.visibility)
                 : Icon(Icons.visibility_off),
           ),
