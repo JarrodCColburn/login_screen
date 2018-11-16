@@ -3,17 +3,18 @@ import './widget/login_screen.dart';
 import './util/auth.dart';
 
 class AuthPage extends StatelessWidget {
-  AuthPage({this.logo});
+  String title;
+  AuthPage({this.logo, this.title});
 
   final Widget logo;
 
   List<Widget> get views => [
-    Container(child: Center(child: Text('hello'),),),
+    Container(child: Center(child: Text('Under Construction'),),),
         LoginScreen(
           credentialsCallback: Auth.instance.emailSignIn,
           logo: logo,
         ),
-    Container(child: Center(child: Text('hello'),),)
+    Container(child: Center(child: Text('Under Construction'),),)
 
       ];
 
@@ -30,7 +31,7 @@ class AuthPage extends StatelessWidget {
       length: views.length,
       initialIndex: 1,
       child: Scaffold(
-        appBar: AppBar(bottom: TabBar(tabs: tabs)),
+        appBar: AppBar(bottom: TabBar(tabs: tabs,), title: Text('Manhole'), centerTitle: true,),
         body: SafeArea(
           child: TabBarView(children: views),
         ),
