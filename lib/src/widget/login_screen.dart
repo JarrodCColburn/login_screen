@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  bool _isPasswordVisible = true;
+  bool _isPasswordVisible = false;
 
   void toggleVisibility() =>
       setState(() => _isPasswordVisible = !_isPasswordVisible);
@@ -43,57 +43,73 @@ class LoginScreenState extends State<LoginScreen> {
   Widget _buildForm() => Form(
         key: widget.loginForm.formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _buildEmailField(),
+            Container(
+              height: 5.0,
+            ),
             _buildPasswordField(),
-            _buildSubmitButton(),
+//            Container( height: 5.0, ),
+                _buildSubmitButton(),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
       );
 
-  Widget _buildSubmitButton() => RaisedButton(
+  Widget _buildSubmitButton() {
+      return RaisedButton(
+        color: Theme.of(context).primaryColorLight,
         onPressed: _handleSubmit,
-        child: (_isLoading) ? CircularProgressIndicator() : Text('Submit'),
-        shape: RoundedRectangleBorder(),
+        child: Container(
+          child: Text('Submit'),
+        ),
+        shape: OutlineInputBorder(),
       );
+    }
 
+
+  /// email field
   Widget _buildEmailField() => TextFormField(
         controller: widget.loginForm.email,
         validator: widget.loginForm.emailValidator,
+        keyboardType: TextInputType.emailAddress,
         obscureText: false,
         decoration: InputDecoration(
+          border: OutlineInputBorder(),
           labelText: 'Email',
-          icon: Icon(
+          suffixIcon: Icon(
             Icons.email,
-            color: Theme.of(context).accentColor,
           ),
         ),
       );
 
+  /// password field
   Widget _buildPasswordField() => TextFormField(
         controller: widget.loginForm.password,
         validator: widget.loginForm.passwordValidator,
-        obscureText: _isPasswordVisible,
+        obscureText: !_isPasswordVisible,
         decoration: InputDecoration(
           labelText: 'Password',
-          icon: GestureDetector(
+          border: OutlineInputBorder(),
+          suffixIcon: GestureDetector(
             onTap: toggleVisibility,
-            child: (_isPasswordVisible)
-                ? Icon(
-                    Icons.visibility,
-                    color: Theme.of(context).accentColor,
-                  )
-                : Icon(
-                    Icons.visibility_off,
-                    color: Theme.of(context).accentColor,
-                  ),
+            child: visibleButton,
           ),
         ),
       );
 
+  Widget get visibleButton => IconButton(
+        icon: Icon(
+            (_isPasswordVisible) ? Icons.visibility : Icons.visibility_off),
+        onPressed: toggleVisibility,
+        tooltip: 'Toggle Visibility',
+      );
+
+  /// true if keyboard is open
   bool get isKeyboard => MediaQuery.of(context).viewInsets.bottom > 0.0;
 
+  /// if logo provided, show widget when keyboard is closed
   Widget get logo => (isKeyboard)
       ? null
       : Container(
