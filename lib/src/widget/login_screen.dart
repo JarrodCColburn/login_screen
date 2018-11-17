@@ -46,12 +46,10 @@ class LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _buildEmailField(),
-            Container(
-              height: 5.0,
-            ),
+            Container(height: 5.0),
             _buildPasswordField(),
-//            Container( height: 5.0, ),
-                _buildSubmitButton(),
+            Container( height: 5.0),
+            _buildSubmitButton(),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
@@ -62,15 +60,15 @@ class LoginScreenState extends State<LoginScreen> {
         color: Theme.of(context).primaryColorLight,
         onPressed: _handleSubmit,
         child: Container(
-          child: Text('Submit'),
+          height: 55,
+          child: Center(child: (_isLoading) ? CircularProgressIndicator() :Text('Submit')),
         ),
         shape: OutlineInputBorder(),
       );
     }
 
-
   /// email field
-  Widget _buildEmailField() => TextFormField(
+  TextFormField _buildEmailField() => TextFormField(
         controller: widget.loginForm.email,
         validator: widget.loginForm.emailValidator,
         keyboardType: TextInputType.emailAddress,
