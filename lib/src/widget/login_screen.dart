@@ -40,20 +40,24 @@ class LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Widget _buildForm() => Form(
-        key: widget.loginForm.formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildEmailField(),
-            Container(height: 5.0),
-            _buildPasswordField(),
-            Container( height: 5.0),
-            _buildSubmitButton(),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildForm() {
+    return Expanded(
+      child: Form(
+          key: widget.loginForm.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              _buildEmailField(),
+              Container(height: 5.0),
+              _buildPasswordField(),
+              Container( height: 5.0),
+              _buildSubmitButton(),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
         ),
-      );
+    );
+  }
 
   Widget _buildSubmitButton() {
       return RaisedButton(
@@ -116,7 +120,7 @@ class LoginScreenState extends State<LoginScreen> {
         );
 
   List<Widget> get widgets =>
-      [_buildForm(), logo]..removeWhere((e) => e == null);
+      [_buildForm(), (!isKeyboard && logo != null) ? Expanded(child: logo,) : null]..removeWhere((e) => e == null);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +128,7 @@ class LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.all(10.0),
       child: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: widgets,
       )),
     );
