@@ -1,8 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart'  ;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:rxdart/rxdart.dart';
 
 typedef AuthAction = void Function();
+
+enum SignInStatus {
+  invalid
+}
 
 class Auth {
   final BehaviorSubject<FirebaseUser> _user =
@@ -21,7 +26,15 @@ class Auth {
 
   void update() => _auth.currentUser().then((user) => _user.add(user));
 
-  Future<void> emailSignIn(String email, String password) => _auth
-      .signInWithEmailAndPassword(email: email, password: password)
-      .then((user) => _user.add(user));
+
+  Future<SignInStatus> emailSignIn(String email, String password) async {
+    try {
+     await _auth.signInWithEmailAndPassword(email: email, password: password)
+         .then((user) => _user.add(user));
+     return null;
+    } on PlatformException {
+      // wrong username password
+      return SignInStatus.invalid;
+    }
+  }
 }
